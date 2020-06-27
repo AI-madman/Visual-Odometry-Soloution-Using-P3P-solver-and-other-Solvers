@@ -1,0 +1,75 @@
+This file is made to accompany the SOFT based VO using the bundle adjustment metord.
+This file proves the relavent infomation about the Switches used in the Main file and determined in the Config file.
+
+All Switches are a feild in the Switch struct which are set to a value of zero or one. This is done inside the Config 
+file. If a Switch is set to one then the corrponding application is run during the Odometry process when the main file 
+is run. 
+
+Note: if upon activation the switch requires the use of user defined hyper-paramters, these can be accesed in the Switch 
+Paramters Portion of the Config file.
+
+Note: if all Switches which change or add anything to the feature detection, feature matching, and pose estimation are
+set to zero (eqivelent to being off) including the bucketing paramter the result is the Vanillia or base algortim results.
+
+The Switch struct currently contains the following feilds:
+-Bucketing
+-ShowGT
+-EssetialMatrix
+-ShowScatter
+-ShowScatter3
+-BundleAdjustment
+-ImageBlacking
+-ParrallProcessing
+-ViewPlot
+-CaculateDistancePropagated
+-CaculateError
+-SaveVO
+-SaveVOAdjusted
+-ImageBlackingAdjusted
+============================================Bucketing===================================================================
+bucketing subdevides the image into a series of square boxes. Then detects the features, however, it will only allow
+the n post powerful features in each box to be selected. Where the total number of features is N.
+Both n and N are hyperparamters to be optimised to the dataset along with the hight, with and numer of boxes.
+============================================ShowGT======================================================================
+Determines if the Ground truth will be shown on the graph depicting the trajectory of the agent alongside the 
+odometry estimate.
+============================================EssetialMatrix==============================================================
+Uses a basic essential matrix algorthim to determine the pose of the agent.
+============================================ShowScatter=================================================================
+Shows a 2D scatter plot of the odometry trajectory estimate. Shows ground truth if Switch.ShowGT is on.
+============================================ShowScatter3================================================================
+Shows a 3D scatter plot of the odometry trajectory estimate. Shows ground truth if Switch.ShowGT is on.
+If ShowScatter3 is used ShowScatter2 is unnessacry and only serves to dely the runtime and deplete memory.
+============================================BundleAdjustment============================================================
+Uses a basic Bundle Adjustment algorthim to determine the pose of the agent.
+============================================ImageBlacking===============================================================
+When activated the topic section of each image is blacked out. This prevents any features from being detected in the 
+top section of the images. It also has the downside of not being able to match/track any features that are detected 
+in the lower region of the image which moves to the top region of the image in the next frame. 
+
+The propotion of the image that is blacked out is determined by the ImageBlacking paramter which is a element of the
+range [0,1]. The number of rows in each image is multiled by the paramter. The Integer proption of the multiplation is 
+taken to be the amount of rows that will be blacked out. Notice that the number of coloumns do not matter in the caulation
+also the code is set up to work with images of any size provided thay are two dimentional.
+============================================ParrallProcessing=============================================================
+If this is activated Matlab will use the parall processing toolbox to run the code in parrall.
+============================================ViewPlot======================================================================
+Disabled by defult. This option will slow down the runtime significantly. This option is degined to let the user view the
+plots at each itteration. The lenght of the pause is a hyperparamter set by the user. This hyperparamter is dubbed 
+ViewPlotTime. Note this is normaly unnessacry.
+============================================CaculateDistancePropagated====================================================
+Enabled by defult. Determines the total Euclidain distance the agent has traveled.
+============================================CaculateError=================================================================
+Enabled by defult. Determines a series of error values for each ittartaion of the loop. The Error values caculated include:
+Euclideian Error; Maximum Error; Running Error; Avarage Error.
+============================================SaveVO========================================================================
+Enabled By defult. This Switch will run after the Visual Odometry methord has finshed running. This option will save the 
+current workspace to a specified location. The location can be set using the VOSavePath paramter/option.
+============================================SaveVOAdjusted=================================================================
+Enabled By defult. This Switch will run after the Adjusted Visual Odometry methord has finshed running. This option will 
+save the current workspace to a specified location. The location can be set using the VOAdjustedSavePath paramter/option.
+============================================ImageBlackingAdjusted==========================================================
+Enabled by defult. This will run a seprate Bundle Adjustement Based Visual Odometry methord that is exactly the same as the
+normal SOFT methord, however, it allows for a separte Blacking paramter value namely ImageBlackingAdjusted. This is used to
+caculate a better approximation of Z postion of the agent as the orginal SOFT methord is quite good in the XY-Plane, but 
+preforms terrably in the estimation of depth. It can also be used to have two separte blacking paramters.

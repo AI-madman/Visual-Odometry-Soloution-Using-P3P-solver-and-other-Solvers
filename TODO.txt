@@ -1,0 +1,4 @@
+This file is a TODO list that repasents what changes must be made to the code.
+
+* Complete the projection matrix function (let it read in all the diffrent calibrations for the kitti datset)
+* Add a few alternative bundle adjustment methords.
